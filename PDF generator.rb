@@ -39,14 +39,6 @@ button.signal_connect('clicked'){
   
      filename=number_prev.to_s+'.pdf'
   Prawn::Document.generate(filename,:page_size => "A4",:margin => 0.mm) do
- 
-    font_families.update(
-  "Times" => {
-    :normal      => { :file => 'TIMESBD.TTF', :font => "Times" },
-  }
-)
-font_size 13
-font "Times"
 	pos_x = 14.mm
 	pos_y = 269.mm
 	width1 = 113
@@ -54,19 +46,18 @@ font "Times"
 	(1..50).each do |k|
 	(0..3).each do |j|
 	(0..4).each do |i|
-	text_n = sprintf "№ %0.6d",number_prev.to_s
-	text_box text_n,:at =>[pos_x+i*width1, pos_y-j*heigth1]
+	text_n = sprintf "%0.6d",number_prev.to_s
+	formatted_text_box [
+		{:text =>"№ ",:font => "TIMESBD.TTF",:size =>11},
+		{:text => text_n,:font => "JOURNALCTT.TTF",:size =>13}
+	],:at =>[pos_x+i*width1, pos_y-j*heigth1]
+	
 	number_prev+=1
 	end
 	end
 	start_new_page unless k==50
 	end
-
-  
-    
-    
-    
-  end
+end
 
 if check.active? 
 template = CombinePDF.load("template.pdf").pages[0]
@@ -82,7 +73,6 @@ end
 grid = Gtk::Grid.new()
 grid.margin = 10
 grid.column_spacing=20;
-grid.row_spacing=10;
 grid.attach(entry,0,0,2,1)
 grid.attach(button,2,0,1,1)
 grid.attach(check_p,0,1,1,1)
